@@ -226,5 +226,4 @@ if __name__ == "__main__":
     getDataDay()
     getData()
     joinData()
-    createHomeHTFT()
     createHomeHTGoals()
