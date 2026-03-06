@@ -157,7 +157,7 @@ with tab2:
 
     home = st.selectbox(
         "Selecione o time mandante:",
-        load_data()["Home"].sort_values().unique(),
+        load_data_total()["Home"].sort_values().unique(),
     )
     # Exibir os dados baseado no home - time selecionado
     datamandantehtft = load_createHomeHTFT()[load_createHomeHTFT()["Home"] == home]
@@ -528,7 +528,7 @@ with tab3:
 
     away = st.selectbox(
         "Selecione o time visitante:",
-        load_data()["Away"].sort_values().unique(),
+        load_data_total()["Away"].sort_values().unique(),
     )
 
     # Exibir os dados baseado no home - time selecionado
@@ -932,7 +932,7 @@ with tab4:
         width="content",
     )
 
-    jogosfiltrados2 = load_data_today()[load_data_today()["Date"] == dateJD][
+    jogosdiaselecionado2 = load_data_today()[load_data_today()["Date"] == dateJD][
         ["Date", "Time", "League", "Home", "Away", "Odd_H_Back", "Odd_Over05_HT_Back"]
     ]
 
@@ -954,11 +954,58 @@ with tab4:
         else pd.DataFrame()
     )
 
-    jogosfiltrados2 = filtro2(jogosfiltrados2)
+    jogosfiltrados2 = filtro2(jogosdiaselecionado2)
 
     st.write("### Over 0.5 HT")
     st.dataframe(
         jogosfiltrados2,
+        hide_index=True,
+        width="content",
+    )
+
+    jogosdiaselecionado3 = load_data_today()[load_data_today()["Date"] == dateJD][
+        ["Date", "Time", "League", "Home", "Away", "Odd_H_Back", "Odd_A_Back"]
+    ]
+
+    filtro3 = lambda df: (
+        df[
+            (  # 1º Condição
+                (df["Odd_H_Back"] >= 3.10)
+                & (df["Odd_H_Back"] <= 3.29)
+                & (df["Odd_A_Back"] >= 2.30)
+                & (df["Odd_A_Back"] <= 2.499)
+            )
+            | (  # 2º Condição
+                (df["Odd_H_Back"] >= 3.30)
+                & (df["Odd_H_Back"] <= 3.49)
+                & (df["Odd_A_Back"] >= 2.30)
+                & (df["Odd_A_Back"] <= 2.49)
+            )
+            | (  # 3º Condição
+                (df["Odd_H_Back"] >= 2.90)
+                & (df["Odd_H_Back"] <= 3.09)
+                & (df["Odd_A_Back"] >= 2.50)
+                & (df["Odd_A_Back"] <= 2.69)
+            )
+            | (  # 4º Condição
+                (df["Odd_H_Back"] >= 3.30)
+                & (df["Odd_H_Back"] <= 3.49)
+                & (df["Odd_A_Back"] >= 2.50)
+                & (df["Odd_A_Back"] <= 2.69)
+            )
+        ]
+        if isinstance(df, pd.DataFrame)
+        else pd.DataFrame()
+    )
+
+    jogosfiltrados3 = filtro3(jogosdiaselecionado3)
+
+    # Dados unicos
+    jogosfiltrados3 = jogosfiltrados3.drop_duplicates(subset=["Home", "Away"])
+
+    st.write("### Vitória do Mandante")
+    st.dataframe(
+        jogosfiltrados3,
         hide_index=True,
         width="content",
     )
