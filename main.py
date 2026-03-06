@@ -1,6 +1,7 @@
-import pandas as pd
-import os
 import datetime
+import os
+
+import pandas as pd
 
 
 def getDataDay():
@@ -72,7 +73,7 @@ def joinData():
             ]
         ]
 
-        HT00.to_csv(f"{PATH}/Dados_Betfair_Exchange_HT00.csv", index=False, sep=";")
+        HT00.to_csv(f"{PATH}/Join_Dados_Betfair_Exchange_Dia.csv", index=False, sep=";")
         ####### 0 x 0 HT #######
 
 
@@ -107,7 +108,8 @@ def createDataframeHTFT():
 
 
 def createHomeHTFT():
-    """Criar dataframe com informações de gols e resultado no HT e FT apenas para jogos de casa"""
+    """Criar dataframe com informações de gols e resultado no HT e FT
+    apenas para jogos de casa"""
 
     df = createDataframeHTFT()
 
@@ -279,7 +281,8 @@ def createHomeHTGoals00Result():
         axis=1,
     )
 
-    # Agrupar por time e resultado do FT, calculando a quantidade de jogos para cada resultado
+    # Agrupar por time e resultado do FT,
+    # calculando a quantidade de jogos para cada resultado
     team_stats = (
         (
             hthomegoals.groupby(["Home", "Result_FT"])
@@ -332,7 +335,8 @@ def createHomeHTGoals00Result():
 
 
 def createAwayHTFT():
-    """Criar dataframe com informações de gols e resultado no HT e FT apenas para jogos de casa"""
+    """Criar dataframe com informações de gols e resultado no HT e FT
+    apenas para jogos de casa"""
 
     df = createDataframeHTFT()
 
@@ -504,7 +508,8 @@ def createAwayHTGoals00Result():
         axis=1,
     )
 
-    # Agrupar por time e resultado do FT, calculando a quantidade de jogos para cada resultado
+    # Agrupar por time e resultado do FT,
+    # calculando a quantidade de jogos para cada resultado
     team_stats = (
         (
             hthomegoals.groupby(["Away", "Result_FT"])
